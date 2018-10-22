@@ -6,13 +6,13 @@ const chain = new Blockchain();
 /**
  * Controller Definition to encapsulate routes to work with blocks
  */
-class BlockController {
+ class BlockController {
 
     /**
      * Constructor to create a new BlockController, you need to initialize here all your endpoints
      * @param {*} app 
      */
-    constructor(app) {
+     constructor(app) {
         this.app = app;
         this.blocks = [];
         this.initializeMockData();
@@ -27,7 +27,7 @@ class BlockController {
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/block/:index"
      */
-    getBlockByIndex() {
+     getBlockByIndex() {
         this.app.get("/block/:index", async (req, res) => {
             try {
                 const response = await chain.getBlock(req.params.index)
@@ -44,27 +44,27 @@ class BlockController {
     /**
      * Implement a POST Endpoint to add a new Block, url: "/block"
      */
-    postNewBlock() {
+     postNewBlock() {
         this.app.post("/block", async (req, res) => {
-             if (req.body.body === '' || req.body.body === undefined) {
+            if (req.body.body === '' || req.body.body === undefined) {
                 res.status(400).json({
                   "status": 400,
                   message: "No content, fill the body parameter"
-                })
-              }
-
-              await chain.addBlock(new Block(req.body.body))
-              const height = await chain.getBlockHeight()
-              const response = await chain.getBlock(height)
-
-              res.status(201).send(response)
-        });
+              })
+            }
+            else{
+                await chain.addBlock(new Block(req.body.body))
+                const height = await chain.getBlockHeight()
+                const response = await chain.getBlock(height)
+                res.status(201).send(response)  
+            }
+    });
     }
 
     /**
      * Help method to inizialized Mock dataset, adds 10 test blocks to the blocks array
      */
-    initializeMockData() {
+     initializeMockData() {
         if(this.blocks.length === 0){
             for (let index = 0; index < 10; index++) {
                 let blockAux = new Block(`Test Data #${index}`);
@@ -81,4 +81,4 @@ class BlockController {
  * Exporting the BlockController class
  * @param {*} app 
  */
-module.exports = (app) => { return new BlockController(app);}
+ module.exports = (app) => { return new BlockController(app);}
